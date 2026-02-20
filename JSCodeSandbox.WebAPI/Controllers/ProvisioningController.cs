@@ -6,14 +6,14 @@ namespace JSCodeSandbox.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class CodeExecutionEnvironmentController : ControllerBase
+    public class ProvisioningController : ControllerBase
     {
         private readonly ICodeExecutionEnvironmentsProvisioningService _provisioningService;
-        private readonly ILogger<CodeExecutionEnvironmentController> _logger;
+        private readonly ILogger<ProvisioningController> _logger;
 
-        public CodeExecutionEnvironmentController(
+        public ProvisioningController(
             ICodeExecutionEnvironmentsProvisioningService provisioningService,
-            ILogger<CodeExecutionEnvironmentController> logger)
+            ILogger<ProvisioningController> logger)
         {
             _provisioningService = provisioningService;
             _logger = logger;
