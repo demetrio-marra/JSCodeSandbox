@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Esprima" Version="3.0.5" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\JSCodeSandbox\JSCodeSandbox.csproj" />
   </ItemGroup>
 
