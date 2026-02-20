@@ -13,4 +13,10 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\JSCodeSandbox.Application\JSCodeSandbox.Application.csproj" />
+    <ProjectReference Include="..\JSCodeSandbox.Infrastructure\JSCodeSandbox.Infrastructure.csproj" />
+    <ProjectReference Include="..\JSCodeSandbox\JSCodeSandbox.csproj" />
+  </ItemGroup>
+
 </Project>
