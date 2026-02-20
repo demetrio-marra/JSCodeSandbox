@@ -13,7 +13,7 @@ namespace JSCodeSandbox.Services
         Task ProvisionEnvironmentAsync(ProvisioningEnvironmentCreationRequest request);
 
         /// <summary>
-        /// Asynchronously deletes a provisioning environment based on the specified request.
+        /// Asynchronously deletes a provisioning environment based on the specified name.
         /// </summary>
         /// <param name="provisionedEnvironmentName">The name of the environment to be deleted.</param>
         /// <returns>A task that represents the asynchronous delete operation.</returns>
