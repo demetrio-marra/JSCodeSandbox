@@ -107,7 +107,12 @@ namespace JSCodeSandbox.Application.Services
             Script ast;
             try
             {
-                var parser = new JavaScriptParser();
+                var parserOptions = new ParserOptions
+                {
+                    Comments = true,
+                    Tolerant = false
+                };
+                var parser = new JavaScriptParser(parserOptions);
                 ast = parser.ParseScript(code);
             }
             catch (ParserException ex)
