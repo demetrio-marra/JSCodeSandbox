@@ -11,8 +11,8 @@ namespace JSCodeSandbox.WebAPI.Filters
             if (context.Exception is ValidationException validationException)
             {
                 var errorType = validationException is InvalidCodeToRunException
-                    ? "InvalidCodeToRun"
-                    : "ValidationFailed";
+                    ? "CodeSyntaxError"
+                    : "InvalidRequest";
 
                 context.Result = new BadRequestObjectResult(new
                 {

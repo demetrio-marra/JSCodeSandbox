@@ -30,6 +30,7 @@ namespace JSCodeSandbox.WebAPI
             // Register repositories and services
             builder.Services.AddSingleton<ICodeExecutionEnvironmentsRepository, CodeExecutionEnvironmentsMongoRepository>();
             builder.Services.AddScoped<ICodeExecutionEnvironmentsProvisioningService, CodeExecutionEnvironmentsProvisioningService>();
+            builder.Services.AddScoped<ICodeExecutionService, CodeExecutionService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
