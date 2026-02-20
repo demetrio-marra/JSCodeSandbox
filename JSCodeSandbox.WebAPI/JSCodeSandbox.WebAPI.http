@@ -1,0 +1,6 @@
+@JSCodeSandbox.WebAPI_HostAddress = http://localhost:5047
+
+GET {{JSCodeSandbox.WebAPI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
