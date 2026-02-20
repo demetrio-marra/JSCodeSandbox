@@ -2,6 +2,7 @@
 using JSCodeSandbox.Application.Repositories;
 using JSCodeSandbox.Application.Services;
 using JSCodeSandbox.Infrastructure.Repositories;
+using JSCodeSandbox.Infrastructure.Services;
 using JSCodeSandbox.Services;
 using JSCodeSandbox.WebAPI.Filters;
 using Microsoft.OpenApi.Models;
@@ -26,6 +27,12 @@ namespace JSCodeSandbox.WebAPI
                 .GetSection("CodeExecutionEnvironmentsMongoRepository")
                 .Get<CodeExecutionEnvironmentsMongoRepository.Configuration>();
             builder.Services.AddSingleton(mongoConfig ?? throw new InvalidOperationException("MongoDB configuration is missing"));
+
+            // Register SESJS configuration
+            var sesjsConfig = builder.Configuration
+                .GetSection("SESJSCodeExecutionService")
+                .Get<SESJSSandboxService.SESJSSandboxServiceConfiguration>();
+            builder.Services.AddSingleton(sesjsConfig ?? throw new InvalidOperationException("SESJS configuration is missing"));
 
             // Register repositories and services
             builder.Services.AddSingleton<ICodeExecutionEnvironmentsRepository, CodeExecutionEnvironmentsMongoRepository>();
