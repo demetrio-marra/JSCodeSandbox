@@ -2,6 +2,6 @@
 {
     public class ProvisioningEnvironmentDeletionRequest
     {
-        public string ProvisionedEnvironmentId { get; set; } = string.Empty;
+        public string ProvisionedEnvironmentName { get; set; } = string.Empty;
     }
 }
