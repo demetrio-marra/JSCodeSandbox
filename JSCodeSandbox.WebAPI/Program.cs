@@ -1,4 +1,6 @@
 
+using JSCodeSandbox.WebAPI.Filters;
+
 namespace JSCodeSandbox.WebAPI
 {
     public class Program
@@ -9,7 +11,10 @@ namespace JSCodeSandbox.WebAPI
 
             // Add services to the container.
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers(options =>
+            {
+                options.Filters.Add<ValidationExceptionFilter>();
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
