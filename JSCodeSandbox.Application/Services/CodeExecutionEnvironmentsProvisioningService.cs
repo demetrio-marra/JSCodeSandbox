@@ -13,14 +13,21 @@ namespace JSCodeSandbox.Application.Services
             _provisioningEnvironmentsRepository = provisioningEnvironmentsRepository;
         }
 
-        public Task DeleteEnvironmentAsync(string provisionedEnvironmentName)
+        public async Task DeleteEnvironmentAsync(string provisionedEnvironmentName)
         {
-            throw new NotImplementedException();
+            await _provisioningEnvironmentsRepository.DeleteAsync(provisionedEnvironmentName);
         }
 
-        public Task ProvisionEnvironmentAsync(CodeExecutionEnvironmentCreationRequest request)
+        public async Task ProvisionEnvironmentAsync(CodeExecutionEnvironmentCreationRequest request)
         {
-            throw new NotImplementedException();
+            var environment = new CodeExecutionEnvironment
+            {
+                EnvironmentName = request.EnvironmentName,
+                BackendUrls = request.BackendUrls,
+                CodeImplementation = request.CodeImplementation
+            };
+
+            await _provisioningEnvironmentsRepository.CreateAsync(environment);
         }
     }
 }
