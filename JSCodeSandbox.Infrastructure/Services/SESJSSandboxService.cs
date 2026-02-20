@@ -23,7 +23,7 @@ namespace JSCodeSandbox.Infrastructure.Services
             // save code to a temp js file
             var codeFilePath = System.IO.Path.GetTempFileName() + ".js";
             await System.IO.File.WriteAllTextAsync(codeFilePath, code);
-            Console.WriteLine("Saved code to temporary file: " + codeFilePath);
+            _logger.LogDebug("Saved code to temporary file: {codeFilePath}", codeFilePath);
 
             // change it to node sandbox-runner.js [agent-id] --file <codeFilePath>
 
@@ -50,7 +50,7 @@ namespace JSCodeSandbox.Infrastructure.Services
                 }
 
                 // log the complete command being run
-                _logger.LogDebug("Executing command:\nnode " + sandboxRunnerPath + " " + userAgentId + " --file " + codeFilePath);
+                _logger.LogDebug("Executing command: {command}", startInfo.FileName + " " + startInfo.Arguments);
 
                 var outputTask = process.StandardOutput.ReadToEndAsync();
                 var errorTask = process.StandardError.ReadToEndAsync();
