@@ -4,11 +4,11 @@ using JSCodeSandbox.Services;
 
 namespace JSCodeSandbox.Application.Services
 {
-    public class ProvisioningEnvironmentsService : IProvisioningEnvironmentsService
+    public class CodeExecutionEnvironmentsProvisioningService : ICodeExecutionEnvironmentsProvisioningService
     {
-        private readonly IProvisioningEnvironmentsRepository _provisioningEnvironmentsRepository;
+        private readonly ICodeExecutionEnvironmentsRepository _provisioningEnvironmentsRepository;
 
-        public ProvisioningEnvironmentsService(IProvisioningEnvironmentsRepository provisioningEnvironmentsRepository)
+        public CodeExecutionEnvironmentsProvisioningService(ICodeExecutionEnvironmentsRepository provisioningEnvironmentsRepository)
         {
             _provisioningEnvironmentsRepository = provisioningEnvironmentsRepository;
         }
@@ -18,7 +18,7 @@ namespace JSCodeSandbox.Application.Services
             throw new NotImplementedException();
         }
 
-        public Task ProvisionEnvironmentAsync(ProvisioningEnvironmentCreationRequest request)
+        public Task ProvisionEnvironmentAsync(CodeExecutionEnvironmentCreationRequest request)
         {
             throw new NotImplementedException();
         }

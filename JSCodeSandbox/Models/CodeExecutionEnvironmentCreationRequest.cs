@@ -1,6 +1,6 @@
 ﻿namespace JSCodeSandbox.Models
 {
-    public class ProvisioningEnvironmentCreationRequest
+    public class CodeExecutionEnvironmentCreationRequest
     {
         /// <summary>
         /// The unique identifier of the environment to be provisioned.

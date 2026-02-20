@@ -2,7 +2,7 @@
 
 namespace JSCodeSandbox.Services
 {
-    public interface IProvisioningEnvironmentsService
+    public interface ICodeExecutionEnvironmentsProvisioningService
     {
         /// <summary>
         /// Provisions a new sandbox environment for the user based on the provided request details.
@@ -10,7 +10,7 @@ namespace JSCodeSandbox.Services
         /// </summary>
         /// <param name="request">The request containing details necessary for provisioning the environment, such as user ID and any specific configuration parameters.</param>
         /// <returns>A task that represents the asynchronous provisioning operation.</returns>
-        Task ProvisionEnvironmentAsync(ProvisioningEnvironmentCreationRequest request);
+        Task ProvisionEnvironmentAsync(CodeExecutionEnvironmentCreationRequest request);
 
         /// <summary>
         /// Asynchronously deletes a provisioning environment based on the specified name.
