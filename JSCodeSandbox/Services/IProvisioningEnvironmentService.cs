@@ -2,7 +2,7 @@
 
 namespace JSCodeSandbox.Services
 {
-    public interface IEnvironmentProvisioningService
+    public interface IProvisioningEnvironmentService
     {
         /// <summary>
         /// Provisions a new sandbox environment for the user based on the provided request details.
