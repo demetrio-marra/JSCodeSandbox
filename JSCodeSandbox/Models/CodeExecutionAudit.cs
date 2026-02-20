@@ -3,8 +3,23 @@
     /// <summary>
     /// Represents a log of code execution, including the code that was run, the user agent information, the environment in which it was executed, and the results of the execution.
     /// </summary>
-    public class CodeExecution
+    public class CodeExecutionAudit
     {
+        /// <summary>
+        /// Gets or sets the unique identifier for the code execution.
+        /// </summary>
+        public string Id { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets the date and time when the code execution was started, in Coordinated Universal Time (UTC).
+        /// </summary>
+        public DateTime StartedOnUTC { get; set; }
+
+        /// <summary>
+        /// Gets the date and time when the operation was completed, in Coordinated Universal Time (UTC).
+        /// </summary>
+        public DateTime CompletedOnUTC { get; set; }
+
         /// <summary>
         /// Gets the code that was executed. This is the JavaScript code that the user requested to run in the sandboxed environment.
         /// </summary>
