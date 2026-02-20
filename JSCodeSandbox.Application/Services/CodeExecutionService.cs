@@ -62,11 +62,11 @@ namespace JSCodeSandbox.Application.Services
             }
             catch (ParserException ex)
             {
-                throw new ValidationException($"JavaScript syntax error: {ex.Message}");
+                throw new InvalidCodeToRunException($"JavaScript syntax error: {ex.Message}");
             }
             catch (Exception ex)
             {
-                throw new ValidationException($"Failed to parse JavaScript code: {ex.Message}");
+                throw new InvalidCodeToRunException($"Failed to parse JavaScript code: {ex.Message}");
             }
         }
     }
