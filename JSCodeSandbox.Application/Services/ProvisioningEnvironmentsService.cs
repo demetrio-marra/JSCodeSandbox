@@ -4,11 +4,11 @@ using JSCodeSandbox.Services;
 
 namespace JSCodeSandbox.Application.Services
 {
-    public class ProvisioningEnvironmentService : IProvisioningEnvironmentService
+    public class ProvisioningEnvironmentsService : IProvisioningEnvironmentsService
     {
         private readonly IProvisioningEnvironmentsRepository _provisioningEnvironmentsRepository;
 
-        public ProvisioningEnvironmentService(IProvisioningEnvironmentsRepository provisioningEnvironmentsRepository)
+        public ProvisioningEnvironmentsService(IProvisioningEnvironmentsRepository provisioningEnvironmentsRepository)
         {
             _provisioningEnvironmentsRepository = provisioningEnvironmentsRepository;
         }
