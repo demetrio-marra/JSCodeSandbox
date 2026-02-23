@@ -29,50 +29,7 @@ namespace JSCodeSandbox.Application.Services
 
         public async Task ProvisionEnvironmentAsync(CodeExecutionEnvironmentCreationRequest request)
         {
-            if (request == null)
-            {
-                throw new ValidationException("Request cannot be null.");
-            }
-
-            if (string.IsNullOrWhiteSpace(request.EnvironmentName))
-            {
-                throw new ValidationException("Environment name cannot be null or empty.");
-            }
-
-            if (request.BackendUrls == null)
-            {
-                throw new ValidationException("Backend URLs cannot be null.");
-            }
-
-            if (!request.BackendUrls.Any())
-            {
-                throw new ValidationException("At least one backend URL must be provided.");
-            }
-
-            // validate each backend URL
-            foreach (var url in request.BackendUrls)
-            {
-                var k = url.Key;
-                if (string.IsNullOrWhiteSpace(k))
-                {
-                    throw new ValidationException("Backend URL key cannot be null or empty.");
-                }
-
-                var v = url.Value;
-                if (string.IsNullOrWhiteSpace(v))
-                {
-                    throw new ValidationException("Backend URL cannot be null or empty.");
-                }
-                if (!Uri.IsWellFormedUriString(v, UriKind.Absolute))
-                {
-                    throw new ValidationException($"Invalid backend URL: {url}");
-                }
-            }
-
-            if (string.IsNullOrWhiteSpace(request.CodeImplementation))
-            {
-                throw new ValidationException("Code implementation cannot be null or empty.");
-            }
+            ValidateProvisioningRequest(request);
 
             var endowmentFunctions = await ValidateCodeImplementation(request.CodeImplementation);
 
@@ -85,10 +42,53 @@ namespace JSCodeSandbox.Application.Services
             {
                 EnvironmentName = request.EnvironmentName,
                 BackendUrls = request.BackendUrls,
-                CodeImplementation = completeCode,
+                CodeImplementation = completeCode
             };
 
             await _provisioningEnvironmentsRepository.CreateAsync(environment);
+        }
+
+
+        private void ValidateProvisioningRequest(CodeExecutionEnvironmentCreationRequest request)
+        {
+            if (request == null)
+            {
+                throw new ValidationException("Request cannot be null.");
+            }
+            if (string.IsNullOrWhiteSpace(request.EnvironmentName))
+            {
+                throw new ValidationException("Environment name cannot be null or empty.");
+            }
+            if (request.BackendUrls == null)
+            {
+                throw new ValidationException("Backend URLs cannot be null.");
+            }
+            if (!request.BackendUrls.Any())
+            {
+                throw new ValidationException("At least one backend URL must be provided.");
+            }
+            // validate each backend URL
+            foreach (var url in request.BackendUrls)
+            {
+                var k = url.Key;
+                if (string.IsNullOrWhiteSpace(k))
+                {
+                    throw new ValidationException("Backend URL key cannot be null or empty.");
+                }
+                var v = url.Value;
+                if (string.IsNullOrWhiteSpace(v))
+                {
+                    throw new ValidationException("Backend URL cannot be null or empty.");
+                }
+                if (!Uri.IsWellFormedUriString(v, UriKind.Absolute))
+                {
+                    throw new ValidationException($"Invalid backend URL: {url}");
+                }
+            }
+            if (string.IsNullOrWhiteSpace(request.CodeImplementation))
+            {
+                throw new ValidationException("Code implementation cannot be null or empty.");
+            }
         }
 
         /// <summary>

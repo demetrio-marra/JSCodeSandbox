@@ -44,5 +44,10 @@
         /// Gets the result of the code execution. If IsExecutionError is false, this property contains the standard output produced by the executed code. If IsExecutionError is true, this property contains the error message or stack trace resulting from the execution failure. This allows for detailed logging and debugging of code execution attempts in the sandboxed environment.
         /// </summary>
         public string ExecutionResult { get; set; } = string.Empty;
+
+        /// <summary>
+        /// Gets the host name where the code execution took place. This can be useful for auditing and debugging purposes, especially in scenarios where multiple hosts or containers are used to execute code. It allows tracking which specific host was responsible for executing a particular piece of code, which can help identify issues related to specific hosts or provide insights into load distribution across hosts.
+        /// </summary>
+        public string Hostname { get; set; } = string.Empty;
     }
 }
