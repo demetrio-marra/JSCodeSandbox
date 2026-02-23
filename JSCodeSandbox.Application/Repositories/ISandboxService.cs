@@ -13,6 +13,7 @@
         /// <param name="code">The JavaScript code to execute.</param>
         /// <param name="backends">A dictionary of backend services that may be used during code execution, where the key is the backend name and the value is the backend URL or connection string.</param>
         /// <returns>The result of the code execution as a string.</returns>
+        /// <remarks>Always call ProvisionAsync before calling this method.</remarks>
         Task<string> RunCodeAsync(string environmentName, string userAgentId, string code, Dictionary<string, string> backends);
 
         /// <summary>

@@ -22,7 +22,7 @@ namespace JSCodeSandbox.Infrastructure.Services
         {
             var sandboxPath = Path.Combine(_configuration.EnvironmentsBasePath, environmentName);
 
-            if (Directory.Exists(sandboxPath))
+            if (IsEnvironmentInitialized(sandboxPath))
             {
                 return;
             }
@@ -31,7 +31,7 @@ namespace JSCodeSandbox.Infrastructure.Services
             {
                 await _installSemaphore.WaitAsync();
 
-                if (Directory.Exists(sandboxPath))
+                if (IsEnvironmentInitialized(sandboxPath))
                 {
                     return;
                 }
@@ -161,6 +161,26 @@ namespace JSCodeSandbox.Infrastructure.Services
                     throw new InfrastructureError(GetType().Name, $"Failed to install Node.js dependencies: {error}");
                 }
             }
+        }
+
+        private bool IsEnvironmentInitialized(string sandboxPath)
+        {
+            if (!Directory.Exists(sandboxPath))
+            {
+                return false;
+            }
+
+            if (!File.Exists(Path.Combine(sandboxPath, "sandbox-runner.js")) || !File.Exists(Path.Combine(sandboxPath, "tools-impl.js")))
+            {
+                return false;
+            }
+
+            if (!Directory.Exists(Path.Combine(sandboxPath, "node_modules")))
+            {
+                return false;
+            }
+
+            return true;
         }
 
 
