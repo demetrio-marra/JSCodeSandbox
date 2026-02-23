@@ -22,6 +22,9 @@ namespace JSCodeSandbox.WebAPI
                 options.Filters.Add<ValidationExceptionFilter>();
             });
 
+            // Register AutoMapper
+            builder.Services.AddAutoMapper(typeof(JSCodeSandbox.Infrastructure.Mapping.InfrastructureMappingProfile).Assembly);
+
             // Register MongoDB configuration
             var mongoConfig = builder.Configuration
                 .GetSection("CodeExecutionEnvironmentsMongoRepository")
@@ -38,6 +41,7 @@ namespace JSCodeSandbox.WebAPI
             builder.Services.AddSingleton<ICodeExecutionEnvironmentsRepository, CodeExecutionEnvironmentsMongoRepository>();
             builder.Services.AddScoped<ICodeExecutionEnvironmentsProvisioningService, CodeExecutionEnvironmentsProvisioningService>();
             builder.Services.AddScoped<ICodeExecutionService, CodeExecutionService>();
+            builder.Services.AddScoped<ISandboxService, SESJSSandboxService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();

@@ -29,7 +29,14 @@ namespace JSCodeSandbox.Application.Services
                 throw new ValidationException($"Provisioned environment '{provisionedEnvironmentName}' not found.");
             }
 
-            await _sandboxService.ProvisionAsync(environment.EnvironmentName, environment.CodeImplementation);
+            try
+            {
+                await _sandboxService.ProvisionAsync(environment.EnvironmentName, environment.CodeImplementation);
+            } 
+            catch (Exception ex)
+            {
+                throw new InfrastructureError(GetType().Name, $"Failed to provision sandbox environment: {ex.Message}", ex);
+            }
 
             try
             {
@@ -40,13 +47,21 @@ namespace JSCodeSandbox.Application.Services
                     ExecutionResult = ret
                 };
             }
-            catch (Exception ex)
+            catch (InfrastructureError)
+            {
+                throw;
+            }
+            catch (CodeExecutionException ex)
             {
                 return new CodeExecutionResult
                 {
                     IsError = true,
-                    ExecutionResult = $"Error executing code: {ex.Message}"
+                    ExecutionResult = ex.StandardErrorOutput
                 };
+            }   
+            catch (Exception ex)
+            {
+                throw new InfrastructureError(GetType().Name, $"Unexpected error during code execution: {ex.Message}", ex);
             }
         }
 
