@@ -31,6 +31,12 @@ namespace JSCodeSandbox.WebAPI
                 .Get<CodeExecutionEnvironmentsMongoRepository.Configuration>();
             builder.Services.AddSingleton(mongoConfig ?? throw new InvalidOperationException("MongoDB configuration is missing"));
 
+            // Register MongoDB Audit configuration
+            var mongoAuditConfig = builder.Configuration
+                .GetSection("CodeExecutionsAuditMongoRepository")
+                .Get<CodeExecutionsAuditMongoRepository.Configuration>();
+            builder.Services.AddSingleton(mongoAuditConfig ?? throw new InvalidOperationException("MongoDB Audit configuration is missing"));
+
             // Register SESJS configuration
             var sesjsConfig = builder.Configuration
                 .GetSection("SESJSCodeExecutionService")
@@ -39,6 +45,7 @@ namespace JSCodeSandbox.WebAPI
 
             // Register repositories and services
             builder.Services.AddSingleton<ICodeExecutionEnvironmentsRepository, CodeExecutionEnvironmentsMongoRepository>();
+            builder.Services.AddSingleton<ICodeExecutionsAuditRepository, CodeExecutionsAuditMongoRepository>();
             builder.Services.AddScoped<ICodeExecutionEnvironmentsProvisioningService, CodeExecutionEnvironmentsProvisioningService>();
             builder.Services.AddScoped<ICodeExecutionService, CodeExecutionService>();
             builder.Services.AddScoped<ISandboxService, SESJSSandboxService>();

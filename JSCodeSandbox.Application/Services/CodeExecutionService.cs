@@ -10,11 +10,15 @@ namespace JSCodeSandbox.Application.Services
     {
         private readonly ICodeExecutionEnvironmentsRepository _environmentsRepository;
         private readonly ISandboxService _sandboxService;
+        private readonly ICodeExecutionsAuditRepository _codeExecutionsAuditRepository;
 
-        public CodeExecutionService(ICodeExecutionEnvironmentsRepository environmentsRepository, ISandboxService sandboxService)
+        public CodeExecutionService(ICodeExecutionEnvironmentsRepository environmentsRepository, 
+            ISandboxService sandboxService,
+            ICodeExecutionsAuditRepository codeExecutionsAuditRepository)
         {
             _environmentsRepository = environmentsRepository;
             _sandboxService = sandboxService;
+            _codeExecutionsAuditRepository = codeExecutionsAuditRepository;
         }
 
         public async Task<CodeExecutionResult> ExecuteCodeAsync(CodeExecutionRequest input, string provisionedEnvironmentName)
@@ -31,6 +35,7 @@ namespace JSCodeSandbox.Application.Services
 
             try
             {
+                // Always call the provision method. It creates or do nothing dependencies for the environment, so it's safe to call it every time.
                 await _sandboxService.ProvisionAsync(environment.EnvironmentName, environment.CodeImplementation, environment.PackageJson);
             } 
             catch (Exception ex)
@@ -38,31 +43,58 @@ namespace JSCodeSandbox.Application.Services
                 throw new InfrastructureError(GetType().Name, $"Failed to provision sandbox environment: {ex.Message}", ex);
             }
 
+            var startTime = DateTime.UtcNow;    
+            var isExecutionError = false;
+            string executionResult = string.Empty;
+            string executionId = string.Empty;
             try
             {
                 var ret = await _sandboxService.RunCodeAsync(environment.EnvironmentName, input.UserAgentId, input.CodeToRun, environment.BackendUrls);
-                return new CodeExecutionResult
-                {
-                    IsError = false,
-                    ExecutionResult = ret
-                };
+                executionResult = ret;
             }
-            catch (InfrastructureError)
+            catch (InfrastructureError ex)
             {
+                executionResult = ex.Message;
+                isExecutionError = true;
                 throw;
             }
             catch (CodeExecutionException ex)
             {
-                return new CodeExecutionResult
-                {
-                    IsError = true,
-                    ExecutionResult = ex.StandardErrorOutput
-                };
+                executionResult = ex.Message;
+                isExecutionError = true;
             }   
             catch (Exception ex)
             {
+                executionResult = ex.Message;
+                isExecutionError = true;
                 throw new InfrastructureError(GetType().Name, $"Unexpected error during code execution: {ex.Message}", ex);
             }
+            finally
+            {
+                var endTime = DateTime.UtcNow;
+
+                var codeExecutionAudit = new CodeExecutionAudit
+                {
+                    UserAgentId = input.UserAgentId,
+                    EnvironmentName = environment.EnvironmentName,
+                    CodeToRun = input.CodeToRun,
+                    CompletedOnUTC = endTime,
+                    Hostname = Environment.MachineName,
+                    IsExecutionError = isExecutionError,
+                    ExecutionResult = executionResult,
+                    StartedOnUTC = startTime
+                };
+
+                var savedAudit = await _codeExecutionsAuditRepository.CreateAsync(codeExecutionAudit);
+                executionId = savedAudit.Id;
+            }
+
+            return new CodeExecutionResult
+            {
+                ExecutionResult = executionResult,
+                IsError = isExecutionError,
+                Id = executionId
+            };
         }
 
 

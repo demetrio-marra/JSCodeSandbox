@@ -1,6 +1,7 @@
 using AutoMapper;
 using JSCodeSandbox.Application.Models;
 using JSCodeSandbox.Infrastructure.Entities;
+using JSCodeSandbox.Models;
 
 namespace JSCodeSandbox.Infrastructure.Mapping
 {
@@ -9,6 +10,9 @@ namespace JSCodeSandbox.Infrastructure.Mapping
         public InfrastructureMappingProfile()
         {
             CreateMap<CodeExecutionEnvironment, CodeExecutionEnvironmentEntity>()
+                .ReverseMap();
+            
+            CreateMap<CodeExecutionAudit, CodeExecutionAuditEntity>()
                 .ReverseMap();
         }
     }

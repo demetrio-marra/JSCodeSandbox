@@ -2,6 +2,8 @@
 {
     public class CodeExecutionResult
     {
+        public string Id { get; set; } = string.Empty;
+
         /// <summary>
         /// Indicates whether the code execution resulted in an error.
         /// </summary>
