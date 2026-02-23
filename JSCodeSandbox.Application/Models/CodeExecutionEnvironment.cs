@@ -1,4 +1,4 @@
-﻿namespace JSCodeSandbox.Models
+﻿namespace JSCodeSandbox.Application.Models
 {
     public class CodeExecutionEnvironment
     {

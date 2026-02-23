@@ -25,8 +25,6 @@ namespace JSCodeSandbox.Infrastructure.Services
             await System.IO.File.WriteAllTextAsync(codeFilePath, code);
             _logger.LogDebug("Saved code to temporary file: {codeFilePath}", codeFilePath);
 
-            // change it to node sandbox-runner.js [agent-id] --file <codeFilePath>
-
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo("node", sandboxRunnerPath + " " + userAgentId + " --file " + codeFilePath)
             {
                 RedirectStandardOutput = true,

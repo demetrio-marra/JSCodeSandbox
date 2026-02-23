@@ -1,5 +1,5 @@
-﻿using JSCodeSandbox.Application.Repositories;
-using JSCodeSandbox.Models;
+﻿using JSCodeSandbox.Application.Models;
+using JSCodeSandbox.Application.Repositories;
 using MongoDB.Driver;
 
 

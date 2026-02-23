@@ -1,4 +1,4 @@
-﻿using JSCodeSandbox.Models;
+﻿using JSCodeSandbox.Application.Models;
 
 namespace JSCodeSandbox.Application.Repositories
 {

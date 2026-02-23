@@ -4,6 +4,7 @@ using JSCodeSandbox.Models;
 using JSCodeSandbox.Services;
 using Esprima;
 using Esprima.Ast;
+using JSCodeSandbox.Application.Models;
 
 namespace JSCodeSandbox.Application.Services
 {
