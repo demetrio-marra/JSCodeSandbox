@@ -16,7 +16,7 @@ namespace JSCodeSandbox.Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task<string> RunCode(string environmentName, string userAgentId, string code, Dictionary<string, string> backends)
+        public async Task<string> RunCodeAsync(string environmentName, string userAgentId, string code, Dictionary<string, string> backends)
         {
             var sandboxRunnerPath = Path.Combine(_configuration.EnvironmentsBasePath, environmentName, "sandbox-runner.js");
 

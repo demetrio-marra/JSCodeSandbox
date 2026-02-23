@@ -13,6 +13,15 @@
         /// <param name="code">The JavaScript code to execute.</param>
         /// <param name="backends">A dictionary of backend services that may be used during code execution, where the key is the backend name and the value is the backend URL or connection string.</param>
         /// <returns>The result of the code execution as a string.</returns>
-        Task<string> RunCode(string environmentName, string userAgentId, string code, Dictionary<string, string> backends);
+        Task<string> RunCodeAsync(string environmentName, string userAgentId, string code, Dictionary<string, string> backends);
+
+        /// <summary>
+        /// Provisions a new sandboxed environment with the specified name.
+        /// This method is responsible for setting up the environment, including any necessary resources or configurations, to ensure that it is ready for executing JavaScript code securely.
+        /// </summary>
+        /// <param name="environmentName">The name of the environment to provision.</param>
+        /// <param name="codeImplementation">The JavaScript code to execute in the provisioned environment.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        Task ProvisionAsync(string environmentName, string codeImplementation);
     }
 }
