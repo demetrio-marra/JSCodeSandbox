@@ -42,7 +42,8 @@ namespace JSCodeSandbox.Application.Services
             {
                 EnvironmentName = request.EnvironmentName,
                 BackendUrls = request.BackendUrls,
-                CodeImplementation = completeCode
+                CodeImplementation = completeCode,
+                PackageJson = request.PackageJson
             };
 
             await _provisioningEnvironmentsRepository.CreateAsync(environment);
@@ -67,6 +68,11 @@ namespace JSCodeSandbox.Application.Services
             {
                 throw new ValidationException("At least one backend URL must be provided.");
             }
+            if (string.IsNullOrWhiteSpace(request.PackageJson))
+            {
+                throw new ValidationException("Package.json content cannot be null or empty.");
+            }
+
             // validate each backend URL
             foreach (var url in request.BackendUrls)
             {

@@ -1,6 +1,7 @@
 ﻿using JSCodeSandbox.Application.Repositories;
 using JSCodeSandbox.Exceptions;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace JSCodeSandbox.Infrastructure.Services
@@ -140,19 +141,36 @@ namespace JSCodeSandbox.Infrastructure.Services
                 throw new InfrastructureError(GetType().Name, $"Failed to create tools-impl.js in environment directory: {ex.Message}", ex);
             }
 
+            ProcessStartInfo installProcess;
 
-            var npmCommand = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? "npm.cmd" : "npm";
-            
-            var installProcess = new System.Diagnostics.ProcessStartInfo
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                FileName = npmCommand,
-                Arguments = "install",
-                WorkingDirectory = sandboxPath,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                UseShellExecute = false,
-                CreateNoWindow = true,
-            };
+                installProcess = new ProcessStartInfo
+                {
+                    FileName = @"cmd.exe",
+                    Arguments = "/c npm install",
+                    WorkingDirectory = sandboxPath,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                };
+            }
+            else 
+            {
+                installProcess = new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = @"npm",
+                    Arguments = "install",
+                    WorkingDirectory = sandboxPath,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true,
+                };
+            }
+
+            installProcess.EnvironmentVariables["NODE_OPTIONS"] = "--use-system-ca";
 
             using (var process = System.Diagnostics.Process.Start(installProcess))
             {
