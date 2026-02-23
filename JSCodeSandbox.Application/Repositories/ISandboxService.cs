@@ -22,7 +22,8 @@
         /// </summary>
         /// <param name="environmentName">The name of the environment to provision.</param>
         /// <param name="codeImplementation">The JavaScript code to execute in the provisioned environment.</param>
+        /// <param name="packageJson">The package.json content that defines the Node.js dependencies for the environment.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        Task ProvisionAsync(string environmentName, string codeImplementation);
+        Task ProvisionAsync(string environmentName, string codeImplementation, string packageJson);
     }
 }

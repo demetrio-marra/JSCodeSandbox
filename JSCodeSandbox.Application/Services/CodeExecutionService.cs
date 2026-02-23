@@ -31,7 +31,7 @@ namespace JSCodeSandbox.Application.Services
 
             try
             {
-                await _sandboxService.ProvisionAsync(environment.EnvironmentName, environment.CodeImplementation);
+                await _sandboxService.ProvisionAsync(environment.EnvironmentName, environment.CodeImplementation, environment.PackageJson);
             } 
             catch (Exception ex)
             {

@@ -19,5 +19,11 @@
         /// This can include any necessary setup code, such as importing libraries, defining functions, or any other code that needs to be run before executing user-provided code.
         /// </summary>
         public string CodeImplementation { get; set; } = string.Empty;
+
+        /// <summary>
+        /// The package.json content that defines the Node.js dependencies for the environment.
+        /// This will be used to install the required npm packages during environment provisioning.
+        /// </summary>
+        public string PackageJson { get; set; } = string.Empty;
     }
 }

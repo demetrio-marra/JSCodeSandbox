@@ -18,7 +18,7 @@ namespace JSCodeSandbox.Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task ProvisionAsync(string environmentName, string codeImplementation)
+        public async Task ProvisionAsync(string environmentName, string codeImplementation, string packageJson)
         {
             var sandboxPath = Path.Combine(_configuration.EnvironmentsBasePath, environmentName);
 
@@ -36,7 +36,7 @@ namespace JSCodeSandbox.Infrastructure.Services
                     return;
                 }
 
-                await ProvisionSandboxAsync(sandboxPath, codeImplementation);
+                await ProvisionSandboxAsync(sandboxPath, codeImplementation, packageJson);
             }
             finally
             {
@@ -96,9 +96,22 @@ namespace JSCodeSandbox.Infrastructure.Services
         }
 
 
-        private async Task ProvisionSandboxAsync(string sandboxPath, string codeImplementation)
+        private async Task ProvisionSandboxAsync(string sandboxPath, string codeImplementation, string packageJson)
         {
             Directory.CreateDirectory(sandboxPath);
+
+            // create package.json file in the environment directory
+            var packageJsonPath = Path.Combine(sandboxPath, "package.json");
+            try
+            {
+                await File.WriteAllTextAsync(packageJsonPath, packageJson);
+                _logger.LogInformation("Created package.json in environment directory: {packageJsonPath}", packageJsonPath);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to create package.json in environment directory: {packageJsonPath}", packageJsonPath);
+                throw new InfrastructureError(GetType().Name, $"Failed to create package.json in environment directory: {ex.Message}", ex);
+            }
 
             // copy the sandbox-runner.js file to the environment directory
             var sourceSandboxRunnerPath = Path.Combine(AppContext.BaseDirectory, "JsFiles", "sandbox-runner.js");
