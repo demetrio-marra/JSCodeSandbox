@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y curl && \
     apt-get install -y nodejs && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/*
+ARG APP_UID=1654
 USER $APP_UID
 WORKDIR /app
 EXPOSE 8080
