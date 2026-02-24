@@ -64,7 +64,7 @@ namespace JSCodeSandbox.Infrastructure.Services
 
             if (_configuration.NodeExtraCACertsPath != null)
             {
-                startInfo.EnvironmentVariables["NODE_EXTRA_CA_CERTS"] = Path.Combine(AppContext.BaseDirectory, _configuration.NodeExtraCACertsPath);
+                startInfo.EnvironmentVariables["NODE_EXTRA_CA_CERTS"] = _configuration.NodeExtraCACertsPath;
             }
           
             startInfo.EnvironmentVariables["JSSandboxBackends"] = System.Text.Json.JsonSerializer.Serialize(backends);
