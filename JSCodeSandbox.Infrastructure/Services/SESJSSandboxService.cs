@@ -62,11 +62,6 @@ namespace JSCodeSandbox.Infrastructure.Services
                 CreateNoWindow = true,
             };
 
-            if (_configuration.NodeExtraCACertsPath != null)
-            {
-                startInfo.EnvironmentVariables["NODE_EXTRA_CA_CERTS"] = _configuration.NodeExtraCACertsPath;
-            }
-          
             startInfo.EnvironmentVariables["JSSandboxBackends"] = System.Text.Json.JsonSerializer.Serialize(backends);
 
             using (var process = System.Diagnostics.Process.Start(startInfo))
@@ -216,7 +211,6 @@ namespace JSCodeSandbox.Infrastructure.Services
         public class SESJSSandboxServiceConfiguration
         {
             public string EnvironmentsBasePath { get; set; } = string.Empty;
-            public string? NodeExtraCACertsPath { get; set; }
         }
     }
 }
