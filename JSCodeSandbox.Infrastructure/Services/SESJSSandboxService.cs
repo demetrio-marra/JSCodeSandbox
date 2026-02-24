@@ -170,8 +170,6 @@ namespace JSCodeSandbox.Infrastructure.Services
                 };
             }
 
-            installProcess.EnvironmentVariables["NODE_OPTIONS"] = "--use-system-ca";
-
             using (var process = System.Diagnostics.Process.Start(installProcess))
             {
                 if (process == null)
