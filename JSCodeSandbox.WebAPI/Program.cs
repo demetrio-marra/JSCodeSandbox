@@ -48,6 +48,7 @@ namespace JSCodeSandbox.WebAPI
             builder.Services.AddSingleton<ICodeExecutionsAuditRepository, CodeExecutionsAuditMongoRepository>();
             builder.Services.AddScoped<ICodeExecutionEnvironmentsProvisioningService, CodeExecutionEnvironmentsProvisioningService>();
             builder.Services.AddScoped<ICodeExecutionService, CodeExecutionService>();
+            builder.Services.AddScoped<ICodeExecutionsAuditService, CodeExecutionsAuditService>();
             builder.Services.AddScoped<ISandboxService, SESJSSandboxService>();
 
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
