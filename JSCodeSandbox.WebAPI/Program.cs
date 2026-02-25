@@ -65,12 +65,19 @@ namespace JSCodeSandbox.WebAPI
                     }
                 });
 
-                // Enable XML comments if available
+                // Enable XML comments from the WebAPI project
                 var xmlFile = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 if (File.Exists(xmlPath))
                 {
                     options.IncludeXmlComments(xmlPath);
+                }
+
+                // Include XML comments from the domain project (DTOs, models)
+                var domainXmlFile = Path.Combine(AppContext.BaseDirectory, "JSCodeSandbox.xml");
+                if (File.Exists(domainXmlFile))
+                {
+                    options.IncludeXmlComments(domainXmlFile);
                 }
             });
 
