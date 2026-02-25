@@ -93,8 +93,10 @@ namespace JSCodeSandbox.WebAPI.Controllers
             [FromRoute] string environmentName,
             [FromBody] CodeExecutionRequest request)
         {
+            ArgumentNullException.ThrowIfNull(request);
+
             _logger.LogInformation("Executing code in environment: {EnvironmentName} for user: {UserAgentId}", 
-                environmentName, request?.UserAgentId);
+                environmentName, request.UserAgentId);
             
             var result = await _codeExecutionService.ExecuteCodeAsync(request, environmentName);
             

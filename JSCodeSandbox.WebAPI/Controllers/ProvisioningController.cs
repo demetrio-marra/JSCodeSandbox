@@ -61,7 +61,9 @@ namespace JSCodeSandbox.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> ProvisionEnvironment([FromBody] CodeExecutionEnvironmentCreationRequest request)
         {
-            _logger.LogInformation("Provisioning environment: {EnvironmentName}", request?.EnvironmentName);
+            ArgumentNullException.ThrowIfNull(request);
+
+            _logger.LogInformation("Provisioning environment: {EnvironmentName}", request.EnvironmentName);
             
             await _provisioningService.ProvisionEnvironmentAsync(request);
             

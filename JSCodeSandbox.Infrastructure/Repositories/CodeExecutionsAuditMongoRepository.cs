@@ -1,7 +1,9 @@
 using AutoMapper;
 using JSCodeSandbox.Application.Repositories;
+using JSCodeSandbox.Exceptions;
 using JSCodeSandbox.Infrastructure.Entities;
 using JSCodeSandbox.Models;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace JSCodeSandbox.Infrastructure.Repositories
@@ -12,6 +14,7 @@ namespace JSCodeSandbox.Infrastructure.Repositories
         private readonly IMapper _mapper;
         private bool _collectionInitialized = false;
         private readonly SemaphoreSlim _initLock = new SemaphoreSlim(1, 1);
+        private const string InvalidIdFormatMessage = "Invalid id format";
 
         public CodeExecutionsAuditMongoRepository(Configuration configuration, IMapper mapper)
         {
@@ -71,6 +74,9 @@ namespace JSCodeSandbox.Infrastructure.Repositories
 
         public async Task<CodeExecutionAudit?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
         {
+            if (!ObjectId.TryParse(id, out _))
+                throw new ValidationException(InvalidIdFormatMessage);
+
             await EnsureCollectionExistsAsync();
             var filter = Builders<CodeExecutionAuditEntity>.Filter.Eq(e => e.Id, id);
             var entity = await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
@@ -150,6 +156,9 @@ namespace JSCodeSandbox.Infrastructure.Repositories
 
         public async Task<bool> DeleteAsync(string id, CancellationToken cancellationToken = default)
         {
+            if (!ObjectId.TryParse(id, out _))
+                throw new ValidationException(InvalidIdFormatMessage);
+
             await EnsureCollectionExistsAsync();
             var filter = Builders<CodeExecutionAuditEntity>.Filter.Eq(e => e.Id, id);
             var result = await _collection.DeleteOneAsync(filter, cancellationToken);
@@ -158,6 +167,9 @@ namespace JSCodeSandbox.Infrastructure.Repositories
 
         public async Task<bool> ExistsAsync(string id, CancellationToken cancellationToken = default)
         {
+            if (!ObjectId.TryParse(id, out _))
+                throw new ValidationException(InvalidIdFormatMessage);
+
             await EnsureCollectionExistsAsync();
             var filter = Builders<CodeExecutionAuditEntity>.Filter.Eq(e => e.Id, id);
             var count = await _collection.CountDocumentsAsync(filter, cancellationToken: cancellationToken);
