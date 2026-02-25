@@ -3,6 +3,7 @@ using JSCodeSandbox.Exceptions;
 using JSCodeSandbox.Models;
 using JSCodeSandbox.Services;
 using Esprima;
+using Esprima.Ast;
 
 namespace JSCodeSandbox.Application.Services
 {
@@ -122,6 +123,7 @@ namespace JSCodeSandbox.Application.Services
         {
             await Task.CompletedTask;
 
+            Script ast;
             try
             {
                 var parserOptions = new ParserOptions
@@ -129,7 +131,7 @@ namespace JSCodeSandbox.Application.Services
                     Tolerant = false
                 };
                 var parser = new JavaScriptParser(parserOptions);
-                parser.ParseScript(code);
+                ast = parser.ParseScript(code);
             }
             catch (ParserException ex)
             {
@@ -138,6 +140,35 @@ namespace JSCodeSandbox.Application.Services
             catch (Exception ex)
             {
                 throw new InvalidCodeToRunException($"Failed to parse JavaScript code: {ex.Message}");
+            }
+
+            var hasMain = false;
+            foreach (var node in ast.Body)
+            {
+                if (node is not FunctionDeclaration funcDecl)
+                {
+                    continue;
+                }
+
+                var functionName = funcDecl.Id?.Name;
+                if (functionName == "main")
+                {
+                    if (!funcDecl.Async)
+                    {
+                        throw new InvalidCodeToRunException("'main' function must be async.");
+                    }
+                    if (funcDecl.Params.Count != 0)
+                    {
+                        throw new InvalidCodeToRunException("'main' function must be parameterless.");
+                    }
+                    hasMain = true;
+                }
+            }
+
+            if (!hasMain)
+            {
+                throw new InvalidCodeToRunException(
+                    "Code must contain an async parameterless 'main' function defined in the top scope.");
             }
         }
     }
