@@ -1,5 +1,13 @@
 # JSCodeSandbox
 
+[![.NET 8](https://img.shields.io/badge/.NET-8.0-512BD4?logo=dotnet&logoColor=white)](https://dotnet.microsoft.com/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker Ready](https://img.shields.io/badge/Docker-Ready-2496ED?logo=docker&logoColor=white)](https://www.docker.com/)
+[![Kubernetes Ready](https://img.shields.io/badge/Kubernetes-Ready-326CE5?logo=kubernetes&logoColor=white)](https://kubernetes.io/)
+[![Helm Chart](https://img.shields.io/badge/Helm-Chart-0F1689?logo=helm&logoColor=white)](https://github.com/demetrio-marra/JSCodeSandbox-helm)
+[![Node.js](https://img.shields.io/badge/Node.js-Sandboxed-339933?logo=nodedotjs&logoColor=white)](https://nodejs.org/)
+[![SES](https://img.shields.io/badge/SES-Secure%20EcmaScript-F7DF1E?logo=javascript&logoColor=black)](https://github.com/endojs/endo/tree/master/packages/ses)
+[![GitHub](https://img.shields.io/github/stars/demetrio-marra/JSCodeSandbox?style=social)](https://github.com/demetrio-marra/JSCodeSandbox)
 
 A secure Node.js code execution environment built with .NET 8, providing sandboxed JavaScript execution using SES (Secure EcmaScript) for isolated and safe code execution. Designed for **AI workflows** where dynamically generated code must be executed safely against controlled API surfaces.
 
