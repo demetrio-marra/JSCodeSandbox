@@ -97,17 +97,7 @@ class SandboxRunner {
                 debug: () => { }
             },
 
-            // MCP tool functions - wrapped to ensure connection
-            MyPlatform_Statistics_GetRates: async (params) => toolsImpl.MyPlatform_Statistics_GetRates(params),
-            MyPlatform_CompanyInfo_GetAllProductNames: async (params) => toolsImpl.MyPlatform_CompanyInfo_GetAllProductNames(params),
-            MyPlatform_ProvisioningInfo: async (params) => toolsImpl.MyPlatform_ProvisioningInfo(params),
-            MyPlatform_Chart_GenerateChart: async (params) => toolsImpl.MyPlatform_Chart_GenerateChart(params),
-            MyPlatform_ProvisioningInfo_GetById: async (params) => toolsImpl.MyPlatform_ProvisioningInfo_GetById(params),
-            MyPlatform_Statistics_Get: async (params) => toolsImpl.MyPlatform_Statistics_Get(params),
-            MyPlatform_MyPermissions_Get: async (params) => toolsImpl.MyPlatform_MyPermissions_Get(params),
-            MyPlatform_CompanyInfo_GetProductsHierarchy: async (params) => toolsImpl.MyPlatform_CompanyInfo_GetProductsHierarchy(params),
-            MyPlatform_CompanyInfo_FindProductHierarchy: async (params) => toolsImpl.MyPlatform_CompanyInfo_FindProductHierarchy(params),
-            MyPlatform_Statistics_GetAverageDuration: async (params) => toolsImpl.MyPlatform_Statistics_GetAverageDuration(params),
+            /* ENDOWMENTS_PLACEHOLDER */
 
             // Utility globals
             JSON,

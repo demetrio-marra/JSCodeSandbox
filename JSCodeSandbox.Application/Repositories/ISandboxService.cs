@@ -23,7 +23,8 @@
         /// <param name="environmentName">The name of the environment to provision.</param>
         /// <param name="codeImplementation">The JavaScript code to execute in the provisioned environment.</param>
         /// <param name="packageJson">The package.json content that defines the Node.js dependencies for the environment.</param>
+        /// <param name="endowments">A list of endowments (capabilities or resources) that should be made available in the sandboxed environment.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
-        Task ProvisionAsync(string environmentName, string codeImplementation, string packageJson);
+        Task ProvisionAsync(string environmentName, string codeImplementation, string packageJson, IEnumerable<string> endowments);
     }
 }
