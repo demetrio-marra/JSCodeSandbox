@@ -44,7 +44,7 @@ namespace JSCodeSandbox.Application.Services
                 BackendUrls = request.BackendUrls,
                 CodeImplementation = completeCode,
                 PackageJson = request.PackageJson,
-                ExportedFunctions = functionsToBeExported
+                EndowmentFunctions = endowmentFunctions
             };
 
             await _provisioningEnvironmentsRepository.CreateAsync(environment);
