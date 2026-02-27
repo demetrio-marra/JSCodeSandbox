@@ -43,7 +43,8 @@ namespace JSCodeSandbox.Application.Services
                 EnvironmentName = request.EnvironmentName,
                 BackendUrls = request.BackendUrls,
                 CodeImplementation = completeCode,
-                PackageJson = request.PackageJson
+                PackageJson = request.PackageJson,
+                ExportedFunctions = functionsToBeExported
             };
 
             await _provisioningEnvironmentsRepository.CreateAsync(environment);

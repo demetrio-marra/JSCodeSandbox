@@ -16,5 +16,7 @@ namespace JSCodeSandbox.Infrastructure.Entities
         public string CodeImplementation { get; set; } = string.Empty;
         
         public string PackageJson { get; set; } = string.Empty;
+        
+        public IEnumerable<string> ExportedFunctions { get; set; } = new List<string>();
     }
 }
