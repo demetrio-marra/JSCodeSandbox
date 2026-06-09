@@ -37,7 +37,7 @@ namespace JSCodeSandbox.Application.Services
             try
             {
                 // Always call the provision method. It creates or do nothing dependencies for the environment, so it's safe to call it every time.
-                await _sandboxService.ProvisionAsync(environment.EnvironmentName, environment.CodeImplementation, environment.PackageJson);
+                await _sandboxService.ProvisionAsync(environment.EnvironmentName, environment.CodeImplementation, environment.PackageJson, environment.EndowmentFunctions);
             } 
             catch (Exception ex)
             {

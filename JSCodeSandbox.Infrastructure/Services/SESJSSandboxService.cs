@@ -19,7 +19,7 @@ namespace JSCodeSandbox.Infrastructure.Services
             _logger = logger;
         }
 
-        public async Task ProvisionAsync(string environmentName, string codeImplementation, string packageJson)
+        public async Task ProvisionAsync(string environmentName, string codeImplementation, string packageJson, IEnumerable<string> endowments)
         {
             var sandboxPath = Path.Combine(_configuration.EnvironmentsBasePath, environmentName);
 
@@ -37,7 +37,7 @@ namespace JSCodeSandbox.Infrastructure.Services
                     return;
                 }
 
-                await ProvisionSandboxAsync(sandboxPath, codeImplementation, packageJson);
+                await ProvisionSandboxAsync(sandboxPath, codeImplementation, packageJson, endowments);
             }
             finally
             {
@@ -92,7 +92,7 @@ namespace JSCodeSandbox.Infrastructure.Services
         }
 
 
-        private async Task ProvisionSandboxAsync(string sandboxPath, string codeImplementation, string packageJson)
+        private async Task ProvisionSandboxAsync(string sandboxPath, string codeImplementation, string packageJson, IEnumerable<string> endowments)
         {
             Directory.CreateDirectory(sandboxPath);
 
@@ -114,13 +114,16 @@ namespace JSCodeSandbox.Infrastructure.Services
             var destSandboxRunnerPath = Path.Combine(sandboxPath, "sandbox-runner.js");
             try
             {
-                File.Copy(sourceSandboxRunnerPath, destSandboxRunnerPath, true);
-                _logger.LogInformation("Copied sandbox-runner.js to environment directory: {destSandboxRunnerPath}", destSandboxRunnerPath);
+                var sandboxRunnerContent = await File.ReadAllTextAsync(sourceSandboxRunnerPath);
+                var endowedFunctionsList = string.Join(",\n", endowments.Select(e => $"{e}: async (params) => toolsImpl.{e}(params)"));
+                sandboxRunnerContent = sandboxRunnerContent.Replace("/* ENDOWMENTS_PLACEHOLDER */", endowedFunctionsList + ",\n");
+                await File.WriteAllTextAsync(destSandboxRunnerPath, sandboxRunnerContent);
+                _logger.LogInformation("Created sandbox-runner.js in environment directory: {destSandboxRunnerPath}", destSandboxRunnerPath);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to copy sandbox-runner.js to environment directory: {destSandboxRunnerPath}", destSandboxRunnerPath);
-                throw new InfrastructureError(GetType().Name, $"Failed to copy sandbox-runner.js to environment directory: {ex.Message}", ex);
+                _logger.LogError(ex, "Failed to create sandbox-runner.js in environment directory: {destSandboxRunnerPath}", destSandboxRunnerPath);
+                throw new InfrastructureError(GetType().Name, $"Failed to create sandbox-runner.js in environment directory: {ex.Message}", ex);
             }
 
             // create a new file called "tools-impl.js" in the environment directory and write the code implementation to it
