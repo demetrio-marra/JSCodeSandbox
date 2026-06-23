@@ -13,7 +13,7 @@ A secure Node.js code execution environment built with .NET 8, providing sandbox
 
 ## Overview
 
-JSCodeSandbox is a host application that enables secure execution of JavaScript code in isolated sandbox environments. It is purpose-built for **AI-system integration** scenarios where an AI agent dynamically generates code that needs to run against real backend services — without exposing the full system surface to the generated code.
+JSCodeSandbox is a host application that enables secure execution of JavaScript code in isolated sandbox environments. It is purpose-built for **AI-system integration** scenarios where an AI agent dynamically generates code that needs to run against real backend services â€” without exposing the full system surface to the generated code.
 
 It leverages SESJS (Secure EcmaScript) behind the scenes to provide sandbox-execution level safety, preventing untrusted code from accessing sensitive resources or affecting the host system.
 
@@ -27,11 +27,11 @@ The primary use case is enabling AI systems (e.g., LLM-based agents) to **genera
 
 ### Controlled Sandbox Provisioning (Provision Step)
 
-Sandboxes are **not created per individual execution request**. Instead, they are explicitly provisioned once by contributor users or system administrators. During provisioning, the contributor decides exactly **which APIs are exposed** to the sandbox — rather than exposing all available APIs. This gives fine-grained control over the sandbox's capabilities and attack surface.
+Sandboxes are **not created per individual execution request**. Instead, they are explicitly provisioned once by contributor users or system administrators. During provisioning, the contributor decides exactly **which APIs are exposed** to the sandbox â€” rather than exposing all available APIs. This gives fine-grained control over the sandbox's capabilities and attack surface.
 
 ### Secure AI Code Execution (Execute Step)
 
-The AI workflow calls the Execute endpoint, providing both the generated code and the target sandbox name. The sandboxed code can **only call APIs that were explicitly provisioned** in that environment. If the AI generates code that references non-existing or non-provisioned APIs, **the execution will fail** — this is by design and enhances security by preventing the AI from accessing capabilities it was not intended to use.
+The AI workflow calls the Execute endpoint, providing both the generated code and the target sandbox name. The sandboxed code can **only call APIs that were explicitly provisioned** in that environment. If the AI generates code that references non-existing or non-provisioned APIs, **the execution will fail** â€” this is by design and enhances security by preventing the AI from accessing capabilities it was not intended to use.
 
 ## Features
 
@@ -79,7 +79,7 @@ dotnet run --project JSCodeSandbox.WebAPI
 
 ### 1. Provisioning a New Execution Environment
 
-Before any code can be executed, a contributor user must **explicitly provision** an execution environment. This is a one-time setup step — sandboxes are not created per execution request. By controlling what goes into the environment, contributors decide exactly which APIs the sandboxed code will have access to, enabling a least-privilege approach.
+Before any code can be executed, a contributor user must **explicitly provision** an execution environment. This is a one-time setup step â€” sandboxes are not created per execution request. By controlling what goes into the environment, contributors decide exactly which APIs the sandboxed code will have access to, enabling a least-privilege approach.
 
 Each environment is configured with:
 
@@ -160,11 +160,6 @@ async function Deinitialize() {
 
 /**
  * @endowment
- * @tool MyPlatform_CompanyInfo_FindProductHierarchy
- * @description CompanyInfo - Finds which Company and Family a specific Product belongs to.
- * @inputSchema MyPlatformCompanyInfoFindProductHierarchyParams
- * @outputSchema HttpToolResponse<MyPlatformCompanyInfoFindProductHierarchyResult>
- * @errorSchema HttpToolError
  */
 async function MyPlatform_CompanyInfo_FindProductHierarchy(params = {}) {
     try {
@@ -179,11 +174,6 @@ async function MyPlatform_CompanyInfo_FindProductHierarchy(params = {}) {
 
 /**
  * @endowment
- * @tool MyPlatform_Statistics_GetRates
- * @description Get provisioning processes statistics rates for a specific product.
- * @inputSchema MyPlatformStatisticsGetRatesParams
- * @outputSchema HttpToolResponse<MyPlatformStatisticsGetRatesResult>
- * @errorSchema HttpToolError
  */
 async function MyPlatform_Statistics_GetRates(params = {}) {
     try {
@@ -204,7 +194,7 @@ Once an environment is provisioned, the **AI workflow** (or any caller) can exec
 - **Environment Name**: The name of the provisioned environment
 - **JavaScript Code**: The dynamically generated code to execute within the sandbox
 
-The sandboxed code can **only access the endowment functions** explicitly defined during the environment's provisioning step. If the AI generates code that calls an API not included in the environment, the execution will fail — this is an intentional security mechanism that ensures the AI cannot exceed its intended capabilities.
+The sandboxed code can **only access the endowment functions** explicitly defined during the environment's provisioning step. If the AI generates code that calls an API not included in the environment, the execution will fail â€” this is an intentional security mechanism that ensures the AI cannot exceed its intended capabilities.
 
 The first code execution on a new environment is slower due to Node.js initialization and package installation, but subsequent executions will be faster as the environment remains active.
 
@@ -275,7 +265,7 @@ Content-Type: application/json
 - All JavaScript code runs in isolated SES sandboxes
 - No access to Node.js built-in modules unless explicitly provided
 - Environment APIs are the only bridge between sandbox and external resources
-- **API surface restriction**: Each sandbox only exposes the APIs chosen during provisioning, not the full set of available APIs — contributors control exactly what the AI-generated code can do
+- **API surface restriction**: Each sandbox only exposes the APIs chosen during provisioning, not the full set of available APIs â€” contributors control exactly what the AI-generated code can do
 - **Fail-on-unknown-API**: If AI-generated code references an API not provisioned in the target sandbox, execution fails, preventing unintended access
 - Input validation is performed on all provisioning requests
 
