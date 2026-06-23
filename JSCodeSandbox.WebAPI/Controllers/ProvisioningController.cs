@@ -42,7 +42,7 @@ namespace JSCodeSandbox.WebAPI.Controllers
         ///             "orderService": "https://api.example.com/orders"
         ///         },
         ///         "codeImplementation": "const axios = require('axios'); async function fetchData(url) { return (await axios.get(url)).data; }",
-        ///         "packageJson": "{\"name\": \"sandbox-env\", \"version\": \"1.0.0\", \"dependencies\": {\"axios\": \"^1.6.0\"}}"
+        ///         "packageJson": "{\"dependencies\": {\"axios\": \"^1.6.0\"}}"
         ///     }
         ///
         /// **Sample 400 response (validation failure):**

@@ -40,7 +40,7 @@ namespace JSCodeSandbox.Application.Services
 
             var completeCode = request.CodeImplementation + "\n\n" + exportedFunctionsStatement;
 
-            var verifiedPackageJSON = EnsureRequiredSesDependency(request.PackageJson);
+            string verifiedPackageJSON = EnsureRequiredSesDependency(request.PackageJson);
 
 
             var environment = new CodeExecutionEnvironment
@@ -282,8 +282,13 @@ namespace JSCodeSandbox.Application.Services
             return endowmentFunctions;
         }
 
-        private static string EnsureRequiredSesDependency(string packageJson)
+        private static string EnsureRequiredSesDependency(string? packageJson)
         {
+            if (string.IsNullOrWhiteSpace(packageJson))
+            {
+                packageJson = "{}";
+            }
+
             JsonNode root;
             try
             {
@@ -307,10 +312,7 @@ namespace JSCodeSandbox.Application.Services
 
             dependencies["ses"] = "^1.9.0";
 
-            return rootObject.ToJsonString(new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            return rootObject.ToJsonString();
         }
     }
 }

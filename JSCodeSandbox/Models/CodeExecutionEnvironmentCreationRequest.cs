@@ -40,9 +40,9 @@ namespace JSCodeSandbox.Models
         /// <summary>
         /// The full content of a <c>package.json</c> file that declares the Node.js dependencies for the environment.
         /// During provisioning, <c>npm install</c> is executed using this manifest to set up the required packages.
+        /// If no dependencies are required leave it null.
         /// </summary>
-        /// <example>{"name": "sandbox-env", "version": "1.0.0", "dependencies": {"axios": "^1.6.0"}}</example>
-        [Required(ErrorMessage = "PackageJson is required.")]
-        public string PackageJson { get; set; } = string.Empty;
+        /// <example>{"dependencies": {"axios": "^1.6.0"}}</example>
+        public string? PackageJson { get; set; }
     }
 }
