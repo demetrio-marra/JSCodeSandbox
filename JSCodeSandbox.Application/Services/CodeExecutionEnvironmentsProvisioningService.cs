@@ -5,6 +5,8 @@ using JSCodeSandbox.Services;
 using Esprima;
 using Esprima.Ast;
 using JSCodeSandbox.Application.Models;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 
 namespace JSCodeSandbox.Application.Services
 {
@@ -38,12 +40,15 @@ namespace JSCodeSandbox.Application.Services
 
             var completeCode = request.CodeImplementation + "\n\n" + exportedFunctionsStatement;
 
+            var verifiedPackageJSON = EnsureRequiredSesDependency(request.PackageJson);
+
+
             var environment = new CodeExecutionEnvironment
             {
                 EnvironmentName = request.EnvironmentName,
                 BackendUrls = request.BackendUrls,
                 CodeImplementation = completeCode,
-                PackageJson = request.PackageJson,
+                PackageJson = verifiedPackageJSON,
                 EndowmentFunctions = endowmentFunctions
             };
 
@@ -275,6 +280,37 @@ namespace JSCodeSandbox.Application.Services
             }
 
             return endowmentFunctions;
+        }
+
+        private static string EnsureRequiredSesDependency(string packageJson)
+        {
+            JsonNode root;
+            try
+            {
+                root = JsonNode.Parse(packageJson) ?? new JsonObject();
+            }
+            catch (JsonException ex)
+            {
+                throw new ValidationException($"Invalid package.json content: {ex.Message}");
+            }
+
+            if (root is not JsonObject rootObject)
+            {
+                throw new ValidationException("Invalid package.json content: root element must be an object.");
+            }
+
+            if (rootObject["dependencies"] is not JsonObject dependencies)
+            {
+                dependencies = new JsonObject();
+                rootObject["dependencies"] = dependencies;
+            }
+
+            dependencies["ses"] = "^1.9.0";
+
+            return rootObject.ToJsonString(new JsonSerializerOptions
+            {
+                WriteIndented = true
+            });
         }
     }
 }
