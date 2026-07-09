@@ -32,16 +32,22 @@ namespace JSCodeSandbox.WebAPI.Controllers
         /// The environment will be available for code execution via the Execution API
         /// once provisioning completes.
         ///
+        /// **Payload fields:**
+        ///
+        /// - `environmentName`: The unique name of the environment to be provisioned. Used to identify the environment across provisioning, execution, and deletion operations.
+        /// - `backendUrls`: A dictionary of backend services that the sandboxed code will be allowed to call. Each entry maps a logical backend name to its URL.
+        /// - `codeImplementation`: The JavaScript bootstrap code that will be deployed into the provisioned environment, including helper functions, library imports, or framework initialization code that runs before any user-submitted code is executed.
+        /// - `packageJson`: The full content of a `package.json` file that declares the Node.js dependencies for the environment. If no dependencies are required, leave it `null`.
+        ///
         /// **Sample request:**
         ///
         ///     POST /api/Provisioning
         ///     {
-        ///         "environmentName": "SuperUsers",
+        ///         "environmentName": "AccountsService",
         ///         "backendUrls": {
-        ///             "userService": "https://api.example.com/users",
-        ///             "orderService": "https://api.example.com/orders"
+        ///             "accountsServiceUrl": "https://api.mycompany.com/accounts"
         ///         },
-        ///         "codeImplementation": "const axios = require('axios'); async function fetchData(url) { return (await axios.get(url)).data; }",
+        ///         "codeImplementation": "const axios = require('axios');\r\n\r\n// Module-level state populated by Initialize\r\nlet serverUrl = null;\r\nlet httpClient = null;\r\n\r\n// 1. **Initialize Function**: Async function with exactly 2 parameters\r\nasync function Initialize(agentId, backends) {\r\n    if (!backends || typeof backends !== 'object') {\r\n        throw new Error('backends parameter is required and must be an object');\r\n    }\r\n    serverUrl = backends['accountsServiceUrl'];\r\n    if (!serverUrl) {\r\n        throw new Error('accountsServiceUrl backend URL not found in backends configuration');\r\n    }\r\n\r\n    // Pre-configure an axios instance bound to the service base URL\r\n    httpClient = axios.create({\r\n        baseURL: serverUrl,\r\n        timeout: 10000,\r\n        headers: {\r\n            'Content-Type': 'application/json'\r\n        }\r\n    });\r\n}\r\n\r\n// 2. **Deinitialize Function**: Async, parameterless cleanup function\r\nasync function Deinitialize() {\r\n    // Cleanup resources\r\n    httpClient = null;\r\n    serverUrl = null;\r\n}\r\n\r\n/**\r\n * @endowment\r\n */\r\nasync function findCustomerByName(params = {}) {\r\n    let { searchTerm } = params;\r\n\r\n    if (!httpClient) {\r\n        throw new Error('Service not initialized. Call Initialize() before use.');\r\n    }\r\n    if (!searchTerm) {\r\n        throw new Error('searchTerm is required');\r\n    }\r\n\r\n    try {\r\n        const response = await httpClient.get('/customers', {\r\n            params: { name: searchTerm }\r\n        });\r\n        return response.data;\r\n    } catch (error) {\r\n        if (error.response) {\r\n            // Server responded with a non-2xx status\r\n            throw new Error(\r\n                `findCustomerByName failed: ${error.response.status} ${error.response.statusText}`\r\n            );\r\n        } else if (error.request) {\r\n            // Request was made but no response received\r\n            throw new Error(`findCustomerByName failed: no response from ${serverUrl}`);\r\n        } else {\r\n            throw new Error(`findCustomerByName failed: ${error.message}`);\r\n        }\r\n    }\r\n}\r\n\r\n// any other private functions",
         ///         "packageJson": "{\"dependencies\": {\"axios\": \"^1.6.0\"}}"
         ///     }
         ///
@@ -52,7 +58,7 @@ namespace JSCodeSandbox.WebAPI.Controllers
         ///         "error": "EnvironmentName cannot be empty."
         ///     }
         /// </remarks>
-        /// <param name="request">The request body containing the environment name, backend URLs, bootstrap code, and package.json manifest.</param>
+        /// <param name="request">The request body containing the environment name, allowed backend URLs, JavaScript bootstrap code, and optional `package.json` manifest used to provision the environment.</param>
         /// <returns>HTTP 201 Created with a Location header pointing to the provisioned environment.</returns>
         /// <response code="201">Environment provisioned successfully.</response>
         /// <response code="400">The request is invalid. Possible causes: missing required fields, duplicate environment name, or malformed package.json.</response>
@@ -106,3 +112,4 @@ namespace JSCodeSandbox.WebAPI.Controllers
         }
     }
 }
+
