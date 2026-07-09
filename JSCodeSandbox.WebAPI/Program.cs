@@ -1,6 +1,6 @@
-
 using JSCodeSandbox.Application.Repositories;
 using JSCodeSandbox.Application.Services;
+using JSCodeSandbox.Infrastructure.Mapping;
 using JSCodeSandbox.Infrastructure.Repositories;
 using JSCodeSandbox.Infrastructure.Services;
 using JSCodeSandbox.Services;
@@ -22,8 +22,8 @@ namespace JSCodeSandbox.WebAPI
                 options.Filters.Add<ValidationExceptionFilter>();
             });
 
-            // Register AutoMapper
-            builder.Services.AddAutoMapper(typeof(JSCodeSandbox.Infrastructure.Mapping.InfrastructureMappingProfile).Assembly);
+            // Register custom mapper
+            builder.Services.AddSingleton<IMapper>(InfrastructureMappingProfile.CreateMapper());
 
             // Register MongoDB configuration
             var mongoConfig = builder.Configuration

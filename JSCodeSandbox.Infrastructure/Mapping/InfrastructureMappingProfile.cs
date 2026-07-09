@@ -1,19 +1,11 @@
-using AutoMapper;
-using JSCodeSandbox.Application.Models;
-using JSCodeSandbox.Infrastructure.Entities;
-using JSCodeSandbox.Models;
-
 namespace JSCodeSandbox.Infrastructure.Mapping
 {
-    public class InfrastructureMappingProfile : Profile
+    public static class InfrastructureMappingProfile
     {
-        public InfrastructureMappingProfile()
+        public static IMapper CreateMapper()
         {
-            CreateMap<CodeExecutionEnvironment, CodeExecutionEnvironmentEntity>()
-                .ReverseMap();
-            
-            CreateMap<CodeExecutionAudit, CodeExecutionAuditEntity>()
-                .ReverseMap();
+            return new MappingService();
         }
     }
 }
+
