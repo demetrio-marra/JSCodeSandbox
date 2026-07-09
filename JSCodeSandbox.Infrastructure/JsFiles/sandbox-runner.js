@@ -307,17 +307,19 @@ Note: Code runs in a hardened SES sandbox with limited access to Node.js APIs.
             console.log(JSON.stringify(result, null, 2));
         } else {
             if (result.success) {
-                // console.log('\n=== Execution Result ===');
-                console.log(result.result);
+                const output = result.result;
+                if (output !== null && typeof output === 'object') {
+                    console.log(JSON.stringify(output, null, 2));
+                } else {
+                    console.log(output);
+                }
             } else {
-                //console.error('\n=== Execution Error ===');
                 console.error(result.error);
                 if (result.errorStack) {
                     console.error('\nStack trace:');
                     console.error(result.errorStack);
                 }
             }
-            //console.log(`\nExecution time: ${result.executionTime}ms`);
         }
 
         process.exit(result.success ? 0 : 1);
