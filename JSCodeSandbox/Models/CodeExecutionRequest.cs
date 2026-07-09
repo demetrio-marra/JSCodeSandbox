@@ -12,7 +12,17 @@ namespace JSCodeSandbox.Models
         /// Must be a valid JavaScript expression or script.
         /// Can of course be multiline and multiple statements, but for simplicity we treat it as a single string.
         /// </summary>
-        /// <example>async function main() { let getStatisticsAPIResponse = await GetStatistics('product'); return getStatisticsAPIResponse.result; }</example>
+        /// <example>
+        /// async function main() {
+        ///     try {
+        ///         const searchTerm = 'John Doe';
+        ///         const results = await findCustomerByName({ searchTerm });		
+        /// 		return results;
+        ///     } catch (error) {
+        ///         return error;
+        ///     } 
+        /// }
+        /// </example>
         [Required(ErrorMessage = "CodeToRun is required.")]
         public string CodeToRun { get; set; } = string.Empty;
 

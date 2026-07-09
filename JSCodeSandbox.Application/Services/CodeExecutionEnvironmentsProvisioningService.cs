@@ -13,10 +13,14 @@ namespace JSCodeSandbox.Application.Services
     public class CodeExecutionEnvironmentsProvisioningService : ICodeExecutionEnvironmentsProvisioningService
     {
         private readonly ICodeExecutionEnvironmentsRepository _provisioningEnvironmentsRepository;
+        private readonly ISandboxService _sandboxService;
 
-        public CodeExecutionEnvironmentsProvisioningService(ICodeExecutionEnvironmentsRepository provisioningEnvironmentsRepository)
+        public CodeExecutionEnvironmentsProvisioningService(
+            ICodeExecutionEnvironmentsRepository provisioningEnvironmentsRepository,
+            ISandboxService sandboxService)
         {
             _provisioningEnvironmentsRepository = provisioningEnvironmentsRepository;
+            _sandboxService = sandboxService;
         }
 
         public async Task DeleteEnvironmentAsync(string provisionedEnvironmentName)
@@ -27,6 +31,7 @@ namespace JSCodeSandbox.Application.Services
             }
 
             await _provisioningEnvironmentsRepository.DeleteAsync(provisionedEnvironmentName);
+            await _sandboxService.DeleteEnvironmentAsync(provisionedEnvironmentName);
         }
 
         public async Task ProvisionEnvironmentAsync(CodeExecutionEnvironmentCreationRequest request)
@@ -40,7 +45,7 @@ namespace JSCodeSandbox.Application.Services
 
             var completeCode = request.CodeImplementation + "\n\n" + exportedFunctionsStatement;
 
-            var verifiedPackageJSON = EnsureRequiredSesDependency(request.PackageJson);
+            string verifiedPackageJSON = EnsureRequiredSesDependency(request.PackageJson);
 
 
             var environment = new CodeExecutionEnvironment
@@ -73,10 +78,6 @@ namespace JSCodeSandbox.Application.Services
             if (!request.BackendUrls.Any())
             {
                 throw new ValidationException("At least one backend URL must be provided.");
-            }
-            if (string.IsNullOrWhiteSpace(request.PackageJson))
-            {
-                throw new ValidationException("Package.json content cannot be null or empty.");
             }
 
             // validate each backend URL
@@ -282,8 +283,13 @@ namespace JSCodeSandbox.Application.Services
             return endowmentFunctions;
         }
 
-        private static string EnsureRequiredSesDependency(string packageJson)
+        private static string EnsureRequiredSesDependency(string? packageJson)
         {
+            if (string.IsNullOrWhiteSpace(packageJson))
+            {
+                packageJson = "{}";
+            }
+
             JsonNode root;
             try
             {
@@ -307,10 +313,7 @@ namespace JSCodeSandbox.Application.Services
 
             dependencies["ses"] = "^1.9.0";
 
-            return rootObject.ToJsonString(new JsonSerializerOptions
-            {
-                WriteIndented = true
-            });
+            return rootObject.ToJsonString();
         }
     }
 }

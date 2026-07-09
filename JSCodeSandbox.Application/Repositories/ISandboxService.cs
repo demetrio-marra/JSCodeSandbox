@@ -26,5 +26,12 @@
         /// <param name="endowments">A list of endowments (capabilities or resources) that should be made available in the sandboxed environment.</param>
         /// <returns>A task representing the asynchronous operation.</returns>
         Task ProvisionAsync(string environmentName, string codeImplementation, string packageJson, IEnumerable<string> endowments);
+
+        /// <summary>
+        /// Deletes the sandbox folder for the specified environment, if present.
+        /// </summary>
+        /// <param name="environmentName">The name of the environment to delete.</param>
+        /// <returns>A task representing the asynchronous operation.</returns>
+        Task DeleteEnvironmentAsync(string environmentName);
     }
 }

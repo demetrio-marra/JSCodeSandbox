@@ -1,7 +1,7 @@
-﻿using AutoMapper;
-using JSCodeSandbox.Application.Models;
+﻿using JSCodeSandbox.Application.Models;
 using JSCodeSandbox.Application.Repositories;
 using JSCodeSandbox.Infrastructure.Entities;
+using JSCodeSandbox.Infrastructure.Mapping;
 using MongoDB.Driver;
 
 
@@ -57,7 +57,7 @@ namespace JSCodeSandbox.Infrastructure.Repositories
         public async Task CreateAsync(CodeExecutionEnvironment environment)
         {
             await EnsureCollectionExistsAsync();
-            var entity = _mapper.Map<CodeExecutionEnvironmentEntity>(environment);
+            var entity = _mapper.Map<CodeExecutionEnvironment, CodeExecutionEnvironmentEntity>(environment);
             await _collection.InsertOneAsync(entity);
         }
 
@@ -66,7 +66,7 @@ namespace JSCodeSandbox.Infrastructure.Repositories
             await EnsureCollectionExistsAsync();
             var filter = Builders<CodeExecutionEnvironmentEntity>.Filter.Eq(e => e.EnvironmentName, environmentName);
             var entity = await _collection.Find(filter).FirstOrDefaultAsync();
-            return entity == null ? null : _mapper.Map<CodeExecutionEnvironment>(entity);
+            return entity == null ? null : _mapper.Map<CodeExecutionEnvironmentEntity, CodeExecutionEnvironment>(entity);
         }
 
         public async Task DeleteAsync(string environmentName)
@@ -85,3 +85,4 @@ namespace JSCodeSandbox.Infrastructure.Repositories
         }
     }
 }
+

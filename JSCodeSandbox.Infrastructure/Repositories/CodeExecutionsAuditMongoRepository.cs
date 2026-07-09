@@ -1,7 +1,7 @@
-using AutoMapper;
 using JSCodeSandbox.Application.Repositories;
 using JSCodeSandbox.Exceptions;
 using JSCodeSandbox.Infrastructure.Entities;
+using JSCodeSandbox.Infrastructure.Mapping;
 using JSCodeSandbox.Models;
 using MongoDB.Bson;
 using MongoDB.Driver;
@@ -67,9 +67,9 @@ namespace JSCodeSandbox.Infrastructure.Repositories
         public async Task<CodeExecutionAudit> CreateAsync(CodeExecutionAudit codeExecution, CancellationToken cancellationToken = default)
         {
             await EnsureCollectionExistsAsync();
-            var entity = _mapper.Map<CodeExecutionAuditEntity>(codeExecution);
+            var entity = _mapper.Map<CodeExecutionAudit, CodeExecutionAuditEntity>(codeExecution);
             await _collection.InsertOneAsync(entity, cancellationToken: cancellationToken);
-            return _mapper.Map<CodeExecutionAudit>(entity);
+            return _mapper.Map<CodeExecutionAuditEntity, CodeExecutionAudit>(entity);
         }
 
         public async Task<CodeExecutionAudit?> GetByIdAsync(string id, CancellationToken cancellationToken = default)
@@ -80,7 +80,7 @@ namespace JSCodeSandbox.Infrastructure.Repositories
             await EnsureCollectionExistsAsync();
             var filter = Builders<CodeExecutionAuditEntity>.Filter.Eq(e => e.Id, id);
             var entity = await _collection.Find(filter).FirstOrDefaultAsync(cancellationToken);
-            return entity == null ? null : _mapper.Map<CodeExecutionAudit>(entity);
+            return entity == null ? null : _mapper.Map<CodeExecutionAuditEntity, CodeExecutionAudit>(entity);
         }
 
         public async Task<(IEnumerable<CodeExecutionAudit> Items, int TotalCount)> GetAllAsync(int pageNumber, int pageSize, CancellationToken cancellationToken = default)
@@ -96,7 +96,7 @@ namespace JSCodeSandbox.Infrastructure.Repositories
                 .Limit(pageSize)
                 .ToListAsync(cancellationToken);
 
-            var items = _mapper.Map<IEnumerable<CodeExecutionAudit>>(entities);
+            var items = _mapper.Map<CodeExecutionAuditEntity, CodeExecutionAudit>(entities);
             return (items, (int)totalCount);
         }
 
@@ -114,7 +114,7 @@ namespace JSCodeSandbox.Infrastructure.Repositories
                 .Limit(pageSize)
                 .ToListAsync(cancellationToken);
 
-            var items = _mapper.Map<IEnumerable<CodeExecutionAudit>>(entities);
+            var items = _mapper.Map<CodeExecutionAuditEntity, CodeExecutionAudit>(entities);
             return (items, (int)totalCount);
         }
 
@@ -132,7 +132,7 @@ namespace JSCodeSandbox.Infrastructure.Repositories
                 .Limit(pageSize)
                 .ToListAsync(cancellationToken);
 
-            var items = _mapper.Map<IEnumerable<CodeExecutionAudit>>(entities);
+            var items = _mapper.Map<CodeExecutionAuditEntity, CodeExecutionAudit>(entities);
             return (items, (int)totalCount);
         }
 
@@ -150,7 +150,7 @@ namespace JSCodeSandbox.Infrastructure.Repositories
                 .Limit(pageSize)
                 .ToListAsync(cancellationToken);
 
-            var items = _mapper.Map<IEnumerable<CodeExecutionAudit>>(entities);
+            var items = _mapper.Map<CodeExecutionAuditEntity, CodeExecutionAudit>(entities);
             return (items, (int)totalCount);
         }
 
@@ -184,3 +184,4 @@ namespace JSCodeSandbox.Infrastructure.Repositories
         }
     }
 }
+

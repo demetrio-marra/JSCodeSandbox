@@ -32,11 +32,16 @@ namespace JSCodeSandbox.WebAPI.Controllers
         /// <paramref name="environmentName"/>. The environment must have been previously provisioned
         /// via the Provisioning API.
         ///
+        /// **Payload fields:**
+        ///
+        /// - `codeToRun`: The JavaScript code to execute inside the sandboxed environment. It must be a valid JavaScript expression or script and can contain multiple lines and statements.
+        /// - `userAgentId`: A unique identifier for the user or agent requesting the code execution. It is used for tracking, auditing, permission management, and associating execution results with a specific caller.
+        ///
         /// **Sample request:**
         ///
         ///     POST /api/Execution/SuperUsers
         ///     {
-        ///         "codeToRun": "console.log('Hello from sandbox!');",
+        ///         "codeToRun": "async function main() {\r\n    try {\r\n        const searchTerm = 'John Doe';\r\n        const results = await findCustomerByName({ searchTerm });\t\t\r\n\t\treturn results;\r\n    } catch (error) {\r\n        return error;\r\n    } \r\n}",
         ///         "userAgentId": "user-agent-12345"
         ///     }
         ///
@@ -76,7 +81,7 @@ namespace JSCodeSandbox.WebAPI.Controllers
         ///     }
         /// </remarks>
         /// <param name="environmentName">The unique name of the provisioned environment in which the code will be executed.</param>
-        /// <param name="request">The request body containing the JavaScript code and the caller's user agent identifier.</param>
+        /// <param name="request">The request body containing the JavaScript code to run and the caller's unique user or agent identifier.</param>
         /// <returns>A <see cref="CodeExecutionResult"/> containing the execution output or error details.</returns>
         /// <response code="200">Code executed successfully. The response body contains the execution output.</response>
         /// <response code="400">
@@ -104,3 +109,4 @@ namespace JSCodeSandbox.WebAPI.Controllers
         }
     }
 }
+
