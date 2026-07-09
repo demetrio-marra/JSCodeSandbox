@@ -91,6 +91,28 @@ namespace JSCodeSandbox.Infrastructure.Services
             }
         }
 
+        public async Task DeleteEnvironmentAsync(string environmentName)
+        {
+            await Task.CompletedTask;
+
+            var sandboxPath = Path.Combine(_configuration.EnvironmentsBasePath, environmentName);
+
+            if (!Directory.Exists(sandboxPath))
+            {
+                return;
+            }
+
+            try
+            {
+                Directory.Delete(sandboxPath, recursive: true);
+                _logger.LogInformation("Deleted sandbox environment directory: {sandboxPath}", sandboxPath);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Failed to delete sandbox environment directory: {sandboxPath}", sandboxPath);
+                throw new InfrastructureError(GetType().Name, $"Failed to delete sandbox environment directory: {ex.Message}", ex);
+            }
+        }
 
         private async Task ProvisionSandboxAsync(string sandboxPath, string codeImplementation, string packageJson, IEnumerable<string> endowments)
         {

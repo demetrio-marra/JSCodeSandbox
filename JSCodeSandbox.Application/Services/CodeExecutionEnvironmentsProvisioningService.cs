@@ -13,10 +13,14 @@ namespace JSCodeSandbox.Application.Services
     public class CodeExecutionEnvironmentsProvisioningService : ICodeExecutionEnvironmentsProvisioningService
     {
         private readonly ICodeExecutionEnvironmentsRepository _provisioningEnvironmentsRepository;
+        private readonly ISandboxService _sandboxService;
 
-        public CodeExecutionEnvironmentsProvisioningService(ICodeExecutionEnvironmentsRepository provisioningEnvironmentsRepository)
+        public CodeExecutionEnvironmentsProvisioningService(
+            ICodeExecutionEnvironmentsRepository provisioningEnvironmentsRepository,
+            ISandboxService sandboxService)
         {
             _provisioningEnvironmentsRepository = provisioningEnvironmentsRepository;
+            _sandboxService = sandboxService;
         }
 
         public async Task DeleteEnvironmentAsync(string provisionedEnvironmentName)
@@ -27,6 +31,7 @@ namespace JSCodeSandbox.Application.Services
             }
 
             await _provisioningEnvironmentsRepository.DeleteAsync(provisionedEnvironmentName);
+            await _sandboxService.DeleteEnvironmentAsync(provisionedEnvironmentName);
         }
 
         public async Task ProvisionEnvironmentAsync(CodeExecutionEnvironmentCreationRequest request)
